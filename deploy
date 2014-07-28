@@ -1,2 +1,32 @@
 #!/bin/bash
-echo "DEPLOYING (not really, just hello-world right now)"
+TARGET=${1} # the ip of the server
+USER=${2-root}
+
+if [ -z "$TARGET" ]; then
+  echo "USAGE: ./deploy <Target IP/host> <user>"
+  echo "   eg: ./deploy my-server.localnet"
+  exit 0
+fi
+
+AUTHORIZED_KEYS_FILENAME=./assets/${USER}_authorized_keys
+if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
+  mkdir -p ./assets
+  pubkey_file=$HOME/.ssh/id_dsa.pub
+  if [ ! -f $pubkey_file ]; then
+    echo "Please put your public key in $AUTHORIZED_KEYS_FILENAME file"
+    exit 0
+  else
+    echo "Copying your public key ($pubkey_file) to $AUTHORIZED_KEYS_FILENAME"
+    cp $pubkey_file $AUTHORIZED_KEYS_FILENAME
+  fi
+fi
+
+echo ">>> Uploading Authorized Keys For Bootstrap"
+ssh $USER@$TARGET 'mkdir -p ~/.ssh'
+scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
+
+CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET USER=$USER"
+echo ">>> Running capbash:$TASK ($CAP_CALL)"
+
+cd ./submodules/bootstrap
+$CAP_CALL
