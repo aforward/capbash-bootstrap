@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "DEPLOYING (not really, just hello-world right now)"
