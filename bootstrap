@@ -4,5 +4,6 @@ cd ./submodules/bootstrap && bundle install
 # File won't be available right away, so wait for it for a bit
 while [ ! -f ./capbash ]
 do
-  ./capbash update
+  sleep 2
 done
+./capbash update
