@@ -1,2 +1,9 @@
 #!/bin/bash
 git submodule foreach git pull
+
+mkdir -p ./nodes
+cp ./submodules/bootstrap/files/helloworld_node ./nodes/helloworld
+chmod 755 ./nodes/helloworld
+
+cp ./submodules/bootstrap/files/README.md ./README.md
+cp ./submodules/bootstrap/files/capbash ./capbash
