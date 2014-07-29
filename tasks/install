@@ -1,3 +1,8 @@
 #!/bin/bash
 SUBMODULE=$1
 git submodule add https://github.com/aforward/capbash-$SUBMODULE ./submodules/$SUBMODULE
+
+BOOTSTRAP_FILE=./submodules/$SUBMODULE/bootstrap
+if [ -f $BOOTSTRAP_FILE ]; then
+  $BOOTSTRAP_FILE
+fi
