@@ -1,6 +1,7 @@
 #!/bin/bash
 TARGET=${1} # the ip of the server
-USER=${2-root}
+NODE=${2-helloworld}
+USER=${3-root}
 
 if [ -z "$TARGET" ]; then
   echo "USAGE: ./deploy <Target IP/host> <user>"
@@ -25,7 +26,7 @@ echo ">>> Uploading Authorized Keys For Bootstrap"
 ssh $USER@$TARGET 'mkdir -p ~/.ssh'
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
 
-CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET USER=$USER"
+CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER"
 echo ">>> Running capbash:$TASK ($CAP_CALL)"
 
 cd ./submodules/bootstrap

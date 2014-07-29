@@ -1,7 +1,8 @@
 
-if ENV['TARGET'].nil? || ENV['USER'].nil?
+if ENV['TARGET'].nil? || ENV['USER'].nil? || ENV['NODE'].nil?
   puts "Please specify target 'TARGET=<remote_host>', e.g. 'TARGET=10.0.0.3'\n" if ENV['TARGET'].nil?
   puts "Please specify user 'USER=<user>', e.g. 'USER=root'\n" if ENV['USER'].nil?
+  puts "Please specify node 'NODE=<node>', e.g. 'NODE=default'\n" if ENV['NODE'].nil?
   puts ""
   exit
 end
@@ -18,6 +19,7 @@ namespace :capbash do
   task :deploy do
     invoke 'capbash:install_rsync'
     invoke 'capbash:sync_capbash'
+    invoke 'capbash:install_node'
   end
 
   desc "Install Cookbook Repository from cwd"
@@ -35,7 +37,11 @@ namespace :capbash do
     end
   end
 
-
+  task :install_node do
+    on roles(:target), in: :sequence, wait: 1 do
+      execute "cd #{capbash_dir} && ./nodes/#{ENV['NODE']}"
+    end
+  end
 
   desc "Remove all traces of capbash"
   task :cleanup do
