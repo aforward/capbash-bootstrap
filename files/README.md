@@ -20,6 +20,12 @@ cd YOUR_REPO_ROOT
 
 # Deploy to Remote Server #
 
+If working on a local VM, you might need to install SSH before you can bootstrap it.
+
+```
+apt-get install openssh-server openssh-client
+```
+
 To push the helloworld script to your server, all you need if the IP or hostname of your server (e.g. 192.167.0.48) and your root password.
 
 ```
