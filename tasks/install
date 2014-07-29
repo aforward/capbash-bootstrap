@@ -1,0 +1,3 @@
+#!/bin/bash
+SUBMODULE=$1
+git submodule add https://github.com/aforward/capbash-$SUBMODULE ./submodules/$SUBMODULE

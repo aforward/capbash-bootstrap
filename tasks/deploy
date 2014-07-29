@@ -4,8 +4,8 @@ NODE=${2-helloworld}
 USER=${3-root}
 
 if [ -z "$TARGET" ]; then
-  echo "USAGE: ./deploy <Target IP/host> <user>"
-  echo "   eg: ./deploy my-server.localnet"
+  echo "USAGE: ./capbash deploy <Target IP/host> <user>"
+  echo "   eg: ./capbash deploy my-server.localnet"
   exit 0
 fi
 

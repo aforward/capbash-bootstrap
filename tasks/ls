@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Available capbash submodules:"
+echo " -- docker"

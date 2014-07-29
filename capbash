@@ -1,0 +1,4 @@
+#!/bin/bash
+ACTION=${1-ls}
+shift
+./submodules/bootstrap/tasks/$ACTION $@
