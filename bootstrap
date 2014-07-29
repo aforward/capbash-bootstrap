@@ -1,4 +1,4 @@
 #!/bin/bash
 cd ./submodules/bootstrap && bundle install
-./capbash update
+./submodules/bootstrap/tasks/update
 
