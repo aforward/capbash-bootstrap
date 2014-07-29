@@ -2,3 +2,4 @@
 
 echo "Available capbash submodules:"
 echo " -- docker"
+echo " -- monit"
