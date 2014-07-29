@@ -1,9 +1,3 @@
 #!/bin/bash
-cd ./submodules/bootstrap && bundle install
-
-# File won't be available right away, so wait for it for a bit
-while [ ! -f ./capbash ]; do sleep 2; done
-while [ ! -f ./submodules/bootstrap/tasks/update ]; do sleep 2; done
-
-# Now we can boostrap the update
+(cd ./submodules/bootstrap && bundle install)
 ./capbash update
