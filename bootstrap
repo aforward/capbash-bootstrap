@@ -1,4 +1,8 @@
 #!/bin/bash
 
-cd ./submodules/bootstrap
-bundle install
+mkdir -p ./nodes
+cp ./submodules/bootstrap/files/helloworld_node ./nodes/helloworld
+chmod 755 ./nodes/helloworld
+
+cd ./submodules/bootstrap && bundle install
+
