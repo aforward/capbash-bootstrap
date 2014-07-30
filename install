@@ -1,3 +1,4 @@
 #!/bin/bash
 cp ./submodules/bootstrap/files/helloworld /usr/local/bin/helloworld
 chmod 755 /usr/local/bin/helloworld
+echo "set nocompatible" > /root/.vimrc
