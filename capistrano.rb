@@ -18,7 +18,7 @@ namespace :capbash do
   desc "Deploy to your server"
   task :deploy do
     invoke 'capbash:install_rsync'
-    invoke 'capbash:sync_capbash'
+    invoke 'capbash:sync'
     invoke 'capbash:install_node'
   end
 
@@ -31,7 +31,7 @@ namespace :capbash do
   end
 
   desc "Re-install Cookbook Repository from cwd"
-  task :sync_capbash do
+  task :sync do
     run_locally do
       execute "rsync -avz --delete -e \"ssh -p22\" \"#{cwd}/\" \"#{ENV['USER']}@#{ENV["TARGET"]}:#{capbash_dir}\" --exclude \".svn\" --exclude \".git\""
     end

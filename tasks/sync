@@ -4,8 +4,8 @@ NODE=${2-helloworld}
 USER=${3-root}
 
 if [ -z "$TARGET" ]; then
-  echo "USAGE: ./capbash deploy <Target IP/host> <user>"
-  echo "   eg: ./capbash deploy my-server.localnet"
+  echo "USAGE: ./capbash sync <Target IP/host> <user>"
+  echo "   eg: ./capbash sync my-server.localnet"
   exit 0
 fi
 
@@ -26,8 +26,8 @@ echo ">>> Uploading Authorized Keys For Bootstrap"
 ssh $USER@$TARGET 'mkdir -p ~/.ssh'
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
 
-CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER"
-echo ">>> Running capbash:deploy ($CAP_CALL)"
+CAP_CALL="bundle exec cap capbash:sync TARGET=$TARGET NODE=$NODE USER=$USER"
+echo ">>> Running capbash:sync ($CAP_CALL)"
 
 cd ./submodules/bootstrap
 $CAP_CALL
