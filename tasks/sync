@@ -1,7 +1,6 @@
 #!/bin/bash
 TARGET=${1} # the ip of the server
-NODE=${2-helloworld}
-USER=${3-root}
+USER=${2-root}
 
 if [ -z "$TARGET" ]; then
   echo "USAGE: ./capbash sync <Target IP/host> <user>"
@@ -26,7 +25,7 @@ echo ">>> Uploading Authorized Keys For Bootstrap"
 ssh $USER@$TARGET 'mkdir -p ~/.ssh'
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
 
-CAP_CALL="bundle exec cap capbash:sync TARGET=$TARGET NODE=$NODE USER=$USER"
+CAP_CALL="bundle exec cap capbash:sync TARGET=$TARGET USER=$USER"
 echo ">>> Running capbash:sync ($CAP_CALL)"
 
 cd ./submodules/bootstrap

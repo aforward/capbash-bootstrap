@@ -3,6 +3,12 @@ TARGET=${1} # the ip of the server
 NODE=${2-helloworld}
 USER=${3-root}
 
+if [[ -z "$2" ]]; then
+  if [[ -e ./nodes/default ]]; then
+    NODE=default
+  fi
+fi
+
 if [ -z "$TARGET" ]; then
   echo "USAGE: ./capbash deploy <Target IP/host> <user>"
   echo "   eg: ./capbash deploy my-server.localnet"
