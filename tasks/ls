@@ -3,3 +3,6 @@
 echo "Available capbash submodules:"
 echo " -- docker"
 echo " -- monit"
+echo " -- nginx"
+echo " -- drupal"
+echo " -- elixir"
