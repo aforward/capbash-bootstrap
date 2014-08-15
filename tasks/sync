@@ -3,8 +3,8 @@ TARGET=${1} # the ip of the server
 USER=${2-root}
 
 if [ -z "$TARGET" ]; then
-  echo "USAGE: ./capbash sync <Target IP/host> <user>"
-  echo "   eg: ./capbash sync my-server.localnet"
+  echo "USAGE: capbash sync <Target IP/host> <user>"
+  echo "   eg: capbash sync my-server.localnet"
   exit 0
 fi
 

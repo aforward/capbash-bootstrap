@@ -49,13 +49,13 @@ PermitRootLogin yes
 To push the helloworld script to your server, all you need if the IP or hostname of your server (e.g. 192.167.0.48) and your root password.
 
 ```
-./capbash deploy <IP>
+capbash deploy <IP>
 ```
 
 For example,
 
 ```
-./capbash deploy 127.0.0.1
+capbash deploy 127.0.0.1
 ```
 
 # Adding Submodules #
@@ -63,13 +63,13 @@ For example,
 Install scripts are written in bash, and can be added to your project. First you will want to list our available submodules.
 
 ```
-./capbash ls
+capbash ls
 ```
 
 Now, you can install any submodule, e.g. docker
 
 ```
-./capbash install docker
+capbash install docker
 ```
 
 We are working on more submodules, as well as a registry to support third party modules.
@@ -79,5 +79,5 @@ We are working on more submodules, as well as a registry to support third party 
 This is pull all submodules, including capbash itself.
 
 ```
-./capbash update
+capbash update
 ```

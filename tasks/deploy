@@ -10,8 +10,8 @@ if [[ -z "$2" ]]; then
 fi
 
 if [ -z "$TARGET" ]; then
-  echo "USAGE: ./capbash deploy <Target IP/host> <user>"
-  echo "   eg: ./capbash deploy my-server.localnet"
+  echo "USAGE: capbash deploy <Target IP/host> <user>"
+  echo "   eg: capbash deploy my-server.localnet"
   exit 0
 fi
 
