@@ -13,9 +13,9 @@ This allows you to clone the project, make it your own and still stay up on the 
 You will want to clone the project, and then bootstrap it.
 
 ```
-git clone https://github.com/aforward/capbash YOUR_REPO_ROOT
+curl -s https://raw.githubusercontent.com/aforward/capbash/master/capbash-installer | bash
+capbash new YOUR_REPO_ROOT
 cd YOUR_REPO_ROOT
-./bootstrap
 ```
 
 # Server Preconditions #
