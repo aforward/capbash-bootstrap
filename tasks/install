@@ -1,8 +1,32 @@
 #!/bin/bash
 SUBMODULE=$1
-git submodule add https://github.com/aforward/capbash-$SUBMODULE ./submodules/$SUBMODULE
 
-BOOTSTRAP_FILE=./submodules/$SUBMODULE/bootstrap
-if [ -f $BOOTSTRAP_FILE ]; then
-  $BOOTSTRAP_FILE
+if [[ "$SUBMODULE" == "--all" ]]; then
+  # todo, use capbash ls to automate this
+  capbash install apache
+  capbash install cron
+  capbash install deploykeys
+  capbash install docker
+  capbash install drupal
+  capbash install elixir
+  capbash install git
+  capbash install monit
+  capbash install mysql
+  capbash install nginx
+  capbash install phoenix
+  capbash install rails
+  capbash install tarball
+else
+  GIT_URL=https://github.com/aforward/capbash-$SUBMODULE
+  echo "Installing $SUBMODULE ($GIT_URL)..."
+  git submodule add $GIT_URL ./submodules/$SUBMODULE
+
+  BOOTSTRAP_FILE=./submodules/$SUBMODULE/bootstrap
+  if [ -f $BOOTSTRAP_FILE ]; then
+    echo " -- bootstrapping module"
+    $BOOTSTRAP_FILE
+  fi
+  echo "DONE, Installing $SUBMODULE ($GIT_URL)."
 fi
+
+
