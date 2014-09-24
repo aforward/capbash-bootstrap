@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ ! -e $DIR ]]; then
+  echo "  -- Creating (for $USER:$GROUP) $DIR"
+  mkdir -p $DIR
+  chown -R $USER:$GROUP $DIR
+fi

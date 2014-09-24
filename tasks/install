@@ -23,7 +23,7 @@ else
 
   BOOTSTRAP_FILE=./submodules/$SUBMODULE/bootstrap
   if [ -f $BOOTSTRAP_FILE ]; then
-    echo " -- bootstrapping module"
+    echo "  -- bootstrapping module"
     $BOOTSTRAP_FILE
   fi
   echo "DONE, Installing $SUBMODULE ($GIT_URL)."

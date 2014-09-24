@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
+  export OS=ubuntu
+elif [[ "`lsb_release -d | grep \"Red Hat\"`" != "" ]]; then
+  export OS=redhat
+else
+  export OS=unknown
+fi
+
+echo "Exporting \$OS=$OS"
