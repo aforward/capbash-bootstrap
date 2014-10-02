@@ -4,6 +4,8 @@ if [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
   export OS=ubuntu
 elif [[ "`lsb_release -d | grep \"Red Hat\"`" != "" ]]; then
   export OS=redhat
+elif [[ "`lsb_release -d | grep \"CentOS\"`" != "" ]]; then
+  export OS=centos
 else
   export OS=unknown
 fi
