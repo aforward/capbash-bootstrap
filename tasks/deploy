@@ -4,6 +4,8 @@ NODE=${2-helloworld}
 USER=${3-root}
 GROUP=${4-$USER}
 
+DEBUG=${DEBUG-false}
+
 if [[ -z "$2" ]]; then
   if [[ -e ./nodes/default ]]; then
     NODE=default
@@ -33,8 +35,12 @@ echo ">>> Uploading Authorized Keys For Bootstrap"
 ssh $USER@$TARGET 'mkdir -p ~/.ssh'
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
 
-CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
-echo ">>> Running capbash:deploy ($CAP_CALL)"
+if [[ "$DEBUG" = true ]]; then
+  CAP_CALL="bundle exec cap --verbose capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
+else
+  CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
+fi
 
+echo ">>> Running capbash:deploy ($CAP_CALL)"
 cd ./submodules/bootstrap
 $CAP_CALL
