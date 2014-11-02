@@ -68,10 +68,16 @@ namespace :capbash do
   task :install_node do
     on roles(:target), in: :sequence, wait: 1 do
       old_log_level = fetch(:log_level)
-      capbash_log_level = ENV['LOGLEVEL'] || Logger::DEBUG
+
+      # Default capbash log level to INFO
+      # But set SSH to debug so that the remote server will be logged locally
+      capbash_log_level = ENV['LOGLEVEL'] || Logger::INFO
       set_output Logger::DEBUG
       SSHKit.config.output = SSHKit::Formatter::SimpleText.new($stdout)
+
       execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} ./nodes/#{ENV['NODE']}"
+
+      # Now reset the SSH formatter
       SSHKit.config.format = :pretty
       set_output old_log_level
     end
