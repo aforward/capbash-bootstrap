@@ -1,11 +1,17 @@
 #!/bin/bash
+source ./submodules/bootstrap/logging
 
 #-----------
 # Install Script
 #-----------
 
-echo "Install bootstrap..."
+notify "Install bootstrap..."
+warn "  -- Just showing how warnings look"
+error "  -- Just showing how errors look"
 cp ./submodules/bootstrap/files/helloworld /usr/local/bin/helloworld
+debug "  -- Adding /usr/local/bin/helloworld"
 chmod 755 /usr/local/bin/helloworld
+debug "  -- Adding /usr/local/bin/helloworld"
 echo "set nocompatible" > /root/.vimrc
-echo "DONE Install bootstrap."
+debug "  -- Setting nocompatible for 'easier' VIM control"
+notify "DONE Install bootstrap."

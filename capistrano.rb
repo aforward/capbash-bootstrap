@@ -1,4 +1,19 @@
 
+def set_output(level)
+  set :log_level, level
+  configure_backend
+end
+
+class CapbashFormatter < SSHKit::Formatter::Abstract
+  def write(obj)
+    case
+    when obj.is_a?(SSHKit::Command)
+      puts("OBJ: #{obj}")
+    end
+  end
+end
+
+
 if ENV['TARGET'].nil? || ENV['USER'].nil? || ENV['NODE'].nil? || ENV['GROUP'].nil?
   puts "Please specify target 'TARGET=<remote_host>', e.g. 'TARGET=10.0.0.3'\n" if ENV['TARGET'].nil?
   puts "Please specify user 'USER=<user>', e.g. 'USER=root'\n" if ENV['USER'].nil?
@@ -10,6 +25,15 @@ end
 
 role :target, "#{ENV['USER']}@#{ENV['TARGET']}"
 set :stage, :production
+set :format, :pretty
+
+# AVAILABLE DEBUG(0), INFO(1), WARN(2), ERROR(3), FATAL(4)
+set_output (ENV['SSH_LOGLEVEL'] || Logger::INFO).to_i
+
+# set :log_level, ENV['LOGLEVEL'] || Logger::DEBUG
+# SSHKit.config.output_verbosity = (ENV['LOGLEVEL'] || Logger::DEBUG).to_i
+# SSHKit.config.format = :pretty
+# SSHKit.config.output = $stdout
 
 cwd = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
 capbash_dir = '/var/capbash'
@@ -43,7 +67,13 @@ namespace :capbash do
 
   task :install_node do
     on roles(:target), in: :sequence, wait: 1 do
-      execute "cd #{capbash_dir} && ./nodes/#{ENV['NODE']}"
+      old_log_level = fetch(:log_level)
+      capbash_log_level = ENV['LOGLEVEL'] || Logger::DEBUG
+      set_output Logger::DEBUG
+      SSHKit.config.output = SSHKit::Formatter::SimpleText.new($stdout)
+      execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} ./nodes/#{ENV['NODE']}"
+      SSHKit.config.format = :pretty
+      set_output old_log_level
     end
   end
 
