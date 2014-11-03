@@ -4,7 +4,7 @@ NODE=${2-helloworld}
 USER=${3-root}
 GROUP=${4-$USER}
 
-DEBUG=${DEBUG-false}
+SSH_LOGLEVEL=${SSH_LOGLEVEL-1}
 
 if [[ -z "$2" ]]; then
   if [[ -e ./nodes/default ]]; then
@@ -26,21 +26,15 @@ if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
     echo "Please put your public key in $AUTHORIZED_KEYS_FILENAME file"
     exit 0
   else
-    echo "Copying your public key ($pubkey_file) to $AUTHORIZED_KEYS_FILENAME"
+    debug "Copying your public key ($pubkey_file) to $AUTHORIZED_KEYS_FILENAME"
     cp $pubkey_file $AUTHORIZED_KEYS_FILENAME
   fi
 fi
 
-echo ">>> Uploading Authorized Keys For Bootstrap"
-ssh $USER@$TARGET 'mkdir -p ~/.ssh'
-scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
+echo "Uploading Authorized Keys For Bootstrap..."
+ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
+scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
-if [[ "$DEBUG" = true ]]; then
-  CAP_CALL="bundle exec cap --verbose capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
-else
-  CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
-fi
-
-echo ">>> Running capbash:deploy ($CAP_CALL)"
+CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
 cd ./submodules/bootstrap
 $CAP_CALL
