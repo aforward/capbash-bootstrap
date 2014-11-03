@@ -27,8 +27,14 @@ warn() { log $WARNING_LEVEL "  ${LIGHT_RED}WARNING${NC} [${LIGHT_GREEN}$(date +"
 notify() { log $INFO_LEVEL "  ${BLUE}INFO${NC}    [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] $1${NC}"; }
 debug() { log $DEBUG_LEVEL "  ${LIGHT_GREY}DEBUG${NC}   [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] ${LIGHT_GREY}$1${NC}"; }
 
+error_all() { while read line; do error "$line" ; done < $1 ; }
+warn_all() { while read line; do warn "$line" ; done < $1 ; }
+notify_all() { while read line; do notify "$line" ; done < $1 ; }
+debug_all() { while read line; do debug "$line" ; done < $1 ; }
+
 log() {
-  if [ $LOGLEVEL -le $1 ]; then
+  LOGLEVEL=${LOGLEVEL-$INFO_LEVEL}
+  if [ "$LOGLEVEL" -le "$1" ]; then
     # Expand escaped characters, wrap at 70 chars, indent wrapped lines
     echo -e "$2" | sed '2~1s/^/  /' >&3
   fi
@@ -38,3 +44,8 @@ export -f error
 export -f warn
 export -f notify
 export -f debug
+
+export -f error_all
+export -f warn_all
+export -f notify_all
+export -f debug_all

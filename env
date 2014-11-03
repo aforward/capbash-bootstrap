@@ -1,4 +1,5 @@
 #!/bin/bash
+source ./submodules/bootstrap/logging
 
 if [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
   export OS=ubuntu
@@ -10,4 +11,4 @@ else
   export OS=unknown
 fi
 
-echo "Exporting \$OS=$OS"
+debug "Exporting \$OS=$OS"

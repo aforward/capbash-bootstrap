@@ -22,12 +22,10 @@ if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
   fi
 fi
 
-echo ">>> Uploading Authorized Keys For Bootstrap"
-ssh $USER@$TARGET 'mkdir -p ~/.ssh'
-scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys
+echo "Uploading Authorized Keys For Bootstrap..."
+ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
+scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
 CAP_CALL="bundle exec cap capbash:sync TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP"
-echo ">>> Running capbash:sync ($CAP_CALL)"
-
 cd ./submodules/bootstrap
 $CAP_CALL
