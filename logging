@@ -34,7 +34,7 @@ debug_all() { while read line; do debug "$line" ; done < $1 ; }
 
 log() {
   LOGLEVEL=${LOGLEVEL-$INFO_LEVEL}
-  if [ "$LOGLEVEL" -le "$1" ]; then
+  if [ "$LOGLEVEL" -le "$1" ] && [ ! -z "$2" ]; then
     # Expand escaped characters, wrap at 70 chars, indent wrapped lines
     echo -e "$2" | sed '2~1s/^/  /' >&3
   fi
