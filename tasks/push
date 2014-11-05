@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "USAGE: capbash push <Target IP/host> <user>"
+  echo "   eg: capbash push my-server.localnet"
+  exit 0
+fi
+
+capbash sync push $@

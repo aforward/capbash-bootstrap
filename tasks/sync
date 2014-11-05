@@ -1,11 +1,12 @@
 #!/bin/bash
-TARGET=${1} # the ip of the server
-USER=${2-root}
-GROUP=${3-$USER}
+MODE=${1}
+TARGET=${2} # the ip of the server
+USER=${3-root}
+GROUP=${4-$USER}
 
-if [ -z "$TARGET" ]; then
-  echo "USAGE: capbash sync <Target IP/host> <user>"
-  echo "   eg: capbash sync my-server.localnet"
+if [ -z "$MODE" ] || [ "$MODE" != "push" -a "$MODE" != "pull" ]; then
+  echo "USAGE: capbash sync <push/pull> <Target IP/host> <user>"
+  echo "   eg: capbash sync push my-server.localnet"
   exit 0
 fi
 
@@ -26,6 +27,6 @@ echo "Uploading Authorized Keys For Bootstrap..."
 ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
-CAP_CALL="bundle exec cap capbash:sync TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP"
+CAP_CALL="bundle exec cap capbash:$MODE TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP"
 cd ./submodules/bootstrap
 $CAP_CALL
