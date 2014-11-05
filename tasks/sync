@@ -4,8 +4,8 @@ TARGET=${2} # the ip of the server
 USER=${3-root}
 GROUP=${4-$USER}
 
-if [ -z "$MODE" ]; then
-  echo "USAGE: capbash sync <mode> <Target IP/host> <user>"
+if [ -z "$MODE" ] || [ "$MODE" != "push" -a "$MODE" != "pull" ]; then
+  echo "USAGE: capbash sync <push/pull> <Target IP/host> <user>"
   echo "   eg: capbash sync push my-server.localnet"
   exit 0
 fi
