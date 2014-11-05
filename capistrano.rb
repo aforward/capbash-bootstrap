@@ -56,12 +56,19 @@ namespace :capbash do
   end
 
   desc "Re-install Cookbook Repository from cwd"
-  task :sync do
+  task :push do
     run_locally do
       execute "rsync -avz --delete -e \"ssh -p22\" \"#{cwd}/\" \"#{ENV['USER']}@#{ENV["TARGET"]}:#{capbash_dir}\" --exclude \".svn\" --exclude \".git\""
     end
     on roles(:target) do
       execute "chown -R #{ENV['USER']}:#{ENV['GROUP']} #{capbash_dir}"
+    end
+  end
+
+  desc "Grab latest Cookbook Repository from remote for cwd"
+  task :pull do
+    run_locally do
+      execute "rsync -avz --delete -e \"ssh -p22\" \"#{ENV['USER']}@#{ENV["TARGET"]}:#{capbash_dir}/\" \"#{cwd}\" --exclude \".svn\" --exclude \".git\""
     end
   end
 

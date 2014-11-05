@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "USAGE: capbash pull <Target IP/host> <user>"
+  echo "   eg: capbash pull my-server.localnet"
+  exit 0
+fi
+
+capbash sync pull $@
