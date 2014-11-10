@@ -43,7 +43,7 @@ namespace :capbash do
   desc "Deploy to your server"
   task :deploy do
     invoke 'capbash:install_rsync'
-    invoke 'capbash:sync'
+    invoke 'capbash:push'
     invoke 'capbash:install_node'
   end
 
