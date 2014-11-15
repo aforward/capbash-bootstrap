@@ -17,3 +17,6 @@ notify "DONE Install bootstrap."
 
 debug "  -- Making logger available on node"
 cp ./submodules/bootstrap/logging /usr/local/bin/logging
+
+debug "  -- Making resolvevars available on node"
+cp ./submodules/bootstrap/resolvevars /usr/local/bin/resolvevars

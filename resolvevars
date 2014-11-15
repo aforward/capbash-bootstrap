@@ -1,0 +1,8 @@
+#!/bin/bash
+FILENAME=`tempfile`
+echo 'cat <<END_OF_TEXT' >  $FILENAME
+cat "$1"                 >> $FILENAME
+echo 'END_OF_TEXT'       >> $FILENAME
+ANSWER=`bash $FILENAME`
+rm $FILENAME
+echo $ANSWER
