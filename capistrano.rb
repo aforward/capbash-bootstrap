@@ -30,11 +30,6 @@ set :format, :pretty
 # AVAILABLE DEBUG(0), INFO(1), WARN(2), ERROR(3), FATAL(4)
 set_output (ENV['SSH_LOGLEVEL'] || Logger::INFO).to_i
 
-# set :log_level, ENV['LOGLEVEL'] || Logger::DEBUG
-# SSHKit.config.output_verbosity = (ENV['LOGLEVEL'] || Logger::DEBUG).to_i
-# SSHKit.config.format = :pretty
-# SSHKit.config.output = $stdout
-
 cwd = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
 capbash_dir = '/var/capbash'
 
