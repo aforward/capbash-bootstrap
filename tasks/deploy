@@ -1,4 +1,6 @@
 #!/bin/bash
+source ./submodules/bootstrap/logging
+
 TARGET=${1} # the ip of the server
 NODE=${2-helloworld}
 USER=${3-root}
@@ -13,28 +15,37 @@ if [[ -z "$2" ]]; then
 fi
 
 if [ -z "$TARGET" ]; then
-  echo "USAGE: capbash deploy <Target IP/host> <user>"
-  echo "   eg: capbash deploy my-server.localnet"
+  notify "USAGE: capbash deploy <Target IP/host> <user>"
+  notify "   eg: capbash deploy my-server.localnet"
   exit 0
 fi
 
-AUTHORIZED_KEYS_FILENAME=./assets/${USER}_authorized_keys
-if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
-  mkdir -p ./assets
-  pubkey_file=$HOME/.ssh/id_dsa.pub
-  if [ ! -f $pubkey_file ]; then
-    echo "Please put your public key in $AUTHORIZED_KEYS_FILENAME file"
-    exit 0
-  else
-    debug "Copying your public key ($pubkey_file) to $AUTHORIZED_KEYS_FILENAME"
-    cp $pubkey_file $AUTHORIZED_KEYS_FILENAME
+if [ "$TARGET" == "local" ] || [ "$TARGET" == "local" ]; then
+  notify "Deploying $NODE locally ..."
+  # ./nodes/$NODE
+  notify "DONE, Deploying $NODE locally."
+else
+  AUTHORIZED_KEYS_FILENAME=./assets/${USER}_authorized_keys
+  if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
+    mkdir -p ./assets
+    pubkey_file=$HOME/.ssh/id_dsa.pub
+    if [ ! -f $pubkey_file ]; then
+      notify "Please put your public key in $AUTHORIZED_KEYS_FILENAME file"
+      exit 0
+    else
+      debug "Copying your public key ($pubkey_file) to $AUTHORIZED_KEYS_FILENAME"
+      cp $pubkey_file $AUTHORIZED_KEYS_FILENAME
+    fi
   fi
+
+  debug "Uploading Authorized Keys For Bootstrap..."
+  ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
+  scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
+
+  CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
+  cd ./submodules/bootstrap
+  $CAP_CALL
 fi
 
-echo "Uploading Authorized Keys For Bootstrap..."
-ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
-scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
-CAP_CALL="bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP"
-cd ./submodules/bootstrap
-$CAP_CALL
+
