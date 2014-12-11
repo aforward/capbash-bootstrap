@@ -1,7 +1,17 @@
 #!/bin/bash
+source ./submodules/bootstrap/logging
 
-if [[ ! -e $DIR ]]; then
-  echo "  -- Creating (for $USER:$GROUP) $DIR"
-  mkdir -p $DIR
-  chown -R $USER:$GROUP $DIR
+VARIABLE=$1
+DIR=${!VARIABLE}
+
+if [ ! -e $DIR ] ; then
+  mkdir -p ${DIR}
+  if [ $? -ne 0 ] ; then
+    error "Unable to write to $DIR, change your user, change permissions, or change $VARIABLE variable"
+    exit 1
+  else
+    debug "  -- Created $VARIABLE ($DIR)"
+  fi
+else
+  debug "  -- Re-using $VARIABLE ($DIR)"
 fi

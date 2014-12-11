@@ -11,12 +11,21 @@ cp ./submodules/bootstrap/files/helloworld /usr/local/bin/helloworld
 debug "  -- Adding /usr/local/bin/helloworld"
 chmod 755 /usr/local/bin/helloworld
 debug "  -- Adding /usr/local/bin/helloworld"
-echo "set nocompatible" > /root/.vimrc
-debug "  -- Setting nocompatible for 'easier' VIM control"
-notify "DONE Install bootstrap."
+
+if [[ ! -e "$HOME/.vimrc" ]]; then
+  echo "set nocompatible" > "$HOME/.vimrc"
+  debug "  -- Setting nocompatible for 'easier' VIM control ($HOME/.vimrc)"
+else
+  debug "  -- Skipping nocompatible check, file already exists ($HOME/.vimrc)"
+fi
 
 debug "  -- Making logger available on node"
 cp ./submodules/bootstrap/logging /usr/local/bin/logging
 
+debug "  -- Making capbashenv available on node"
+cp ./submodules/bootstrap/env /usr/local/bin/capbashenv
+
 debug "  -- Making resolvevars available on node"
 cp ./submodules/bootstrap/resolvevars /usr/local/bin/resolvevars
+
+notify "DONE Install bootstrap."

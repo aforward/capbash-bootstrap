@@ -1,5 +1,7 @@
 #!/bin/bash
-if [[ "`which tempfile 2> /dev/null`" != "" ]]; then
+if [[ `uname` == "Darwin" ]]; then
+  FILENAME=`mktemp /tmp/capbash_tmp.XXXXXX`
+elif [[ "`which tempfile 2> /dev/null`" != "" ]]; then
   FILENAME=`tempfile`
 elif [[ "`which mktemp 2> /dev/null`" != "" ]]; then
   FILENAME=`mktemp`

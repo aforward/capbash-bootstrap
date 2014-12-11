@@ -1,7 +1,14 @@
 #!/bin/bash
-source ./submodules/bootstrap/logging
 
-if [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
+if [[ -e ./submodules/bootstrap/logging ]]; then
+  source ./submodules/bootstrap/logging
+else
+  source /usr/local/bin/logging
+fi
+
+if [[ `uname` == "Darwin" ]]; then
+  export OS=mac
+elif [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
   export OS=ubuntu
 elif [[ "`lsb_release -d | grep \"Red Hat\"`" != "" ]]; then
   export OS=redhat
@@ -12,3 +19,9 @@ else
 fi
 
 debug "Exporting \$OS=$OS"
+
+OS_ENV=./assets/env/$OS
+if [[ -e $OS_ENV ]]; then
+  debug "Including OS specific env ($OS_ENV)"
+  . $OS_ENV
+fi

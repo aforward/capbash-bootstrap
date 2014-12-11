@@ -22,8 +22,7 @@ fi
 
 if [ "$TARGET" == "local" ] || [ "$TARGET" == "local" ]; then
   notify "Deploying $NODE locally ..."
-  # ./nodes/$NODE
-  notify "DONE, Deploying $NODE locally."
+  ./nodes/$NODE
 else
   AUTHORIZED_KEYS_FILENAME=./assets/${USER}_authorized_keys
   if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
