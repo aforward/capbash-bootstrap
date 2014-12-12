@@ -1,5 +1,6 @@
 #!/bin/bash
-source ./submodules/bootstrap/logging
+[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+set -euo pipefail ; IFS=$'\n\t'
 
 TARGET=${1} # the ip of the server
 NODE=${2-helloworld}

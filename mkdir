@@ -1,7 +1,14 @@
 #!/bin/bash
-source ./submodules/bootstrap/logging
+[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+set -euo pipefail ; IFS=$'\n\t'
 
 VARIABLE=$1
+
+if [[ -z "${!VARIABLE:-}" ]]; then
+  error "Unknown variable $VARIABLE, make sure it is export'ed"
+  exit 1
+fi
+
 DIR=${!VARIABLE}
 
 if [ ! -e $DIR ] ; then

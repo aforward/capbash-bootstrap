@@ -8,14 +8,19 @@ fi
 
 if [[ `uname` == "Darwin" ]]; then
   export OS=mac
+  export SED_I="sed -i ."
 elif [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
   export OS=ubuntu
+  export SED_I="sed -i"
 elif [[ "`lsb_release -d | grep \"Red Hat\"`" != "" ]]; then
   export OS=redhat
+  export SED_I="sed -i"
 elif [[ "`lsb_release -d | grep \"CentOS\"`" != "" ]]; then
   export OS=centos
+  export SED_I="sed -i"
 else
   export OS=unknown
+  export SED_I="sed -i"
 fi
 
 debug "Exporting \$OS=$OS"
