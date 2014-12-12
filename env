@@ -8,7 +8,7 @@ fi
 
 if [[ `uname` == "Darwin" ]]; then
   export OS=mac
-  export SED_I="sed -i ."
+  export SED_I="sed -i .deleteme"
 elif [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
   export OS=ubuntu
   export SED_I="sed -i"
