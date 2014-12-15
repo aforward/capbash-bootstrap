@@ -25,6 +25,7 @@ fi
 
 debug "Exporting \$OS=$OS"
 
+ENV=${ENV-$OS}
 if [[ ! -z "$ENV" ]] && [[ -e "./assets/env/$ENV" ]]; then
   debug "Including ENV specific env ($ENV)"
   . ./assets/env/$ENV
