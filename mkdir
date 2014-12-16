@@ -2,23 +2,29 @@
 [[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
 set -euo pipefail ; IFS=$'\n\t'
 
-VARIABLE=$1
+while test ${#} -gt 0
+do
+  VARIABLE=$1
 
-if [[ -z "${!VARIABLE:-}" ]]; then
-  error "Unknown variable $VARIABLE, make sure it is export'ed"
-  exit 1
-fi
-
-DIR=${!VARIABLE}
-
-if [ ! -e $DIR ] ; then
-  mkdir -p ${DIR}
-  if [ $? -ne 0 ] ; then
-    error "Unable to write to $DIR, change your user, change permissions, or change $VARIABLE variable"
+  if [[ -z "${!VARIABLE:-}" ]]; then
+    error "Unknown variable $VARIABLE, make sure it is export'ed"
     exit 1
-  else
-    debug "  -- Created $VARIABLE ($DIR)"
   fi
-else
-  debug "  -- Re-using $VARIABLE ($DIR)"
-fi
+
+  DIR=${!VARIABLE}
+
+  if [ ! -e $DIR ] ; then
+    mkdir -p ${DIR}
+    if [ $? -ne 0 ] ; then
+      error "Unable to write to $DIR, change your user, change permissions, or change $VARIABLE variable"
+      exit 1
+    else
+      debug "  -- Created $VARIABLE ($DIR)"
+    fi
+  else
+    debug "  -- Re-using $VARIABLE ($DIR)"
+  fi
+  shift
+done
+
+

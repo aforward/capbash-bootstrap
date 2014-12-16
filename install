@@ -7,6 +7,9 @@ set -euo pipefail ; IFS=$'\n\t'
 #-----------
 
 notify "Install bootstrap..."
+
+BOOTSTRAP_OUTPUT=/tmp/bootstrap.log
+
 cp ./submodules/bootstrap/files/helloworld /usr/local/bin/helloworld
 debug "  -- Adding /usr/local/bin/helloworld"
 chmod 755 /usr/local/bin/helloworld
@@ -27,5 +30,26 @@ cp ./submodules/bootstrap/env /usr/local/bin/capbashenv
 
 debug "  -- Making resolvevars available on node"
 cp ./submodules/bootstrap/resolvevars /usr/local/bin/resolvevars
+
+if [[ "`which wget 2> /dev/null`" == "" ]]; then
+  if [[ "$OS" == "ubuntu" ]]; then
+    debug "  -- Installing wget via apt-get"
+    apt-get install -y wget
+  elif [[ "$OS" != "mac" ]]; then
+    debug "  -- Installing wget via yum"
+    yum install -y wget
+  else
+    if [[ "`which brew 2> /dev/null`" == "" ]]; then
+      error "Missing 'wget', and 'brew'"
+      exit 1
+    else
+      notify "  -- Installing wget via brew"
+      SCRIPT_OUTPUT=$(brew install -y wget > $BOOTSTRAP_OUTPUT 2>&1)
+      ERROR="Unable to install wget via brew due to ..." ./submodules/bootstrap/failonerrors $? $BOOTSTRAP_OUTPUT
+      [ $? -ne 0 ] && exit 1
+      debug $SCRIPT_OUTPUT
+    fi
+  fi
+fi
 
 notify "DONE Install bootstrap."
