@@ -39,6 +39,12 @@ if [[ -e "./assets/env/$OS" ]]; then
   . ./assets/env/$OS
 fi
 
+if [[ -e "./assets/env/`hostname`" ]]; then
+  debug "Including HOST variables in ./assets/env/`hostname`"
+  . ./assets/env/`hostname`
+fi
+
+
 if [[ "$ENV" != "ignore" ]] && [[ -e "./assets/env/$ENV" ]]; then
   debug "Including ENV variables in ./assets/env/$ENV"
   . ./assets/env/$ENV
