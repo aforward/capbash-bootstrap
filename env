@@ -3,7 +3,7 @@
 if [[ -e ./submodules/bootstrap/logging ]]; then
   source ./submodules/bootstrap/logging
 else
-  source /usr/local/bin/logging
+  source logging
 fi
 
 if [[ `uname` == "Darwin" ]]; then
