@@ -3,6 +3,12 @@
 set -euo pipefail ; IFS=$'\n\t'
 
 #-----------
+# Configurations
+#-----------
+
+export BIN_DIR=${BIN_DIR-/usr/local/bin}
+
+#-----------
 # Install Script
 #-----------
 
@@ -10,10 +16,12 @@ notify "Install bootstrap..."
 
 BOOTSTRAP_OUTPUT=/tmp/bootstrap.log
 
-cp ./submodules/bootstrap/files/helloworld /usr/local/bin/helloworld
-debug "  -- Adding /usr/local/bin/helloworld"
-chmod 755 /usr/local/bin/helloworld
-debug "  -- Adding /usr/local/bin/helloworld"
+./submodules/bootstrap/mkdir BIN_DIR
+
+./submodules/bootstrap/cp ./submodules/bootstrap/files/helloworld $BIN_DIR/helloworld
+debug "  -- Adding $BIN_DIR/helloworld"
+chmod 755 $BIN_DIR/helloworld
+debug "  -- Adding $BIN_DIR/helloworld"
 
 if [[ ! -e "$HOME/.vimrc" ]]; then
   echo "set nocompatible" > "$HOME/.vimrc"
@@ -23,13 +31,13 @@ else
 fi
 
 debug "  -- Making logger available on node"
-cp ./submodules/bootstrap/logging /usr/local/bin/logging
+./submodules/bootstrap/cp ./submodules/bootstrap/logging $BIN_DIR/logging
 
 debug "  -- Making capbashenv available on node"
-cp ./submodules/bootstrap/env /usr/local/bin/capbashenv
+./submodules/bootstrap/cp ./submodules/bootstrap/env $BIN_DIR/capbashenv
 
 debug "  -- Making resolvevars available on node"
-cp ./submodules/bootstrap/resolvevars /usr/local/bin/resolvevars
+./submodules/bootstrap/cp ./submodules/bootstrap/resolvevars $BIN_DIR/resolvevars
 
 if [[ "`which wget 2> /dev/null`" == "" ]]; then
   if [[ "$OS" == "ubuntu" ]]; then
