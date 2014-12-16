@@ -2,6 +2,9 @@
 [[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
 set -euo pipefail ; IFS=$'\n\t'
 
+MKDIR_OUTPUT=/tmp/mkdir.log
+OWNER=${OWNER-$USER}
+
 while test ${#} -gt 0
 do
   VARIABLE=$1
@@ -14,13 +17,18 @@ do
   DIR=${!VARIABLE}
 
   if [ ! -e $DIR ] ; then
-    mkdir -p ${DIR}
-    if [ $? -ne 0 ] ; then
-      error "Unable to write to $DIR, change your user, change permissions, or change $VARIABLE variable"
-      exit 1
-    else
-      debug "  -- Created $VARIABLE ($DIR)"
+    SCRIPT_OUTPUT=$(mkdir -p ${DIR} > $MKDIR_OUTPUT 2>&1)
+    ERROR="Unable to mkdir -p ${DIR} due to ..." ./submodules/bootstrap/failonerrors $? $MKDIR_OUTPUT
+    [ $? -ne 0 ] && exit 1
+    debug "  -- Created $VARIABLE ($DIR)"
+
+    if [[ "$USER" != "$OWNER" ]]; then
+      SCRIPT_OUTPUT=$(chown -R $OWNER $DIR > $MKDIR_OUTPUT 2>&1)
+      ERROR="Unable to chown to $OWNER $DIR due to ..." ./submodules/bootstrap/failonerrors $? $MKDIR_OUTPUT
+      [ $? -ne 0 ] && exit 1
+      debug "  -- Set ownership to $OWNER ($DIR)"
     fi
+
   else
     debug "  -- Re-using $VARIABLE ($DIR)"
   fi

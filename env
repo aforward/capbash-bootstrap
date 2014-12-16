@@ -27,21 +27,19 @@ else
 fi
 
 debug "Exporting \$OS=$OS"
-
-ENV=${ENV-$OS}
+ENV=${ENV-ignore}
 
 if [[ -e "./assets/env/default" ]]; then
-  debug "Including default ENV variables in ./assets/env/default"
+  debug "Including default variables in ./assets/env/default"
   . ./assets/env/default
 fi
 
-if [[ ! -z "$ENV" ]] && [[ -e "./assets/env/$ENV" ]]; then
-  debug "Including ENV specific env ($ENV)"
+if [[ -e "./assets/env/$OS" ]]; then
+  debug "Including OS variables in ./assets/env/$OS"
+  . ./assets/env/$OS
+fi
+
+if [[ "$ENV" != "ignore" ]] && [[ -e "./assets/env/$ENV" ]]; then
+  debug "Including ENV variables in ./assets/env/$ENV"
   . ./assets/env/$ENV
-else
-  OS_ENV=./assets/env/$OS
-  if [[ -e $OS_ENV ]]; then
-    debug "Including OS specific env ($OS_ENV)"
-    . $OS_ENV
-  fi
 fi
