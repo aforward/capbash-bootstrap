@@ -12,6 +12,9 @@ if [[ `uname` == "Darwin" ]]; then
 elif [[ "`lsb_release -d | grep Ubuntu`" != "" ]]; then
   export OS=ubuntu
   export SED_I="sed -i"
+elif [[ "`lsb_release -d | grep Mint`" != "" ]]; then
+  export OS=mint
+  export SED_I="sed -i"
 elif [[ "`lsb_release -d | grep \"Red Hat\"`" != "" ]]; then
   export OS=redhat
   export SED_I="sed -i"
