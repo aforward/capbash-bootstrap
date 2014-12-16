@@ -13,12 +13,12 @@ class CapbashFormatter < SSHKit::Formatter::Abstract
   end
 end
 
-
-if ENV['TARGET'].nil? || ENV['USER'].nil? || ENV['NODE'].nil? || ENV['GROUP'].nil?
+if ENV['TARGET'].nil? || ENV['USER'].nil? || ENV['NODE'].nil? || ENV['GROUP'].nil? || ENV['REMOTE_DIR'].nil?
   puts "Please specify target 'TARGET=<remote_host>', e.g. 'TARGET=10.0.0.3'\n" if ENV['TARGET'].nil?
   puts "Please specify user 'USER=<user>', e.g. 'USER=root'\n" if ENV['USER'].nil?
   puts "Please specify user 'GROUP=<user>', e.g. 'GROUP=www-data'\n" if ENV['GROUP'].nil?
   puts "Please specify node 'NODE=<node>', e.g. 'NODE=default'\n" if ENV['NODE'].nil?
+  puts "Please specify remote deploy dir 'REMOTE_DIR=<remote_dir>', e.g. 'REMOTE_DIR=/var/capbash'\n" if ENV['REMOTE_DIR'].nil?
   puts ""
   exit
 end
@@ -31,7 +31,8 @@ set :format, :pretty
 set_output (ENV['SSH_LOGLEVEL'] || Logger::INFO).to_i
 
 cwd = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
-capbash_dir = '/var/capbash'
+
+capbash_dir = ENV['REMOTE_DIR']
 
 namespace :capbash do
 

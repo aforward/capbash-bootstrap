@@ -1,2 +1,2 @@
 #!/bin/bash
-(cd $DIR && find . -type f -name "*.deleteme" | xargs rm)
+(cd $DIR && find . -type f -name "*.deleteme" | xargs rm -f)

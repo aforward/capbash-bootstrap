@@ -3,6 +3,8 @@ MODE=${1}
 TARGET=${2} # the ip of the server
 USER=${3-root}
 GROUP=${4-$USER}
+REMOTE_DIR=${REMOTE_DIR-/var/capbash} # where to save on the remote server
+SSH_LOGLEVEL=${SSH_LOGLEVEL-1}
 
 if [ -z "$MODE" ] || [ "$MODE" != "push" -a "$MODE" != "pull" ]; then
   echo "USAGE: capbash sync <push/pull> <Target IP/host> <user>"
@@ -27,6 +29,4 @@ echo "Uploading Authorized Keys For Bootstrap..."
 ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
-CAP_CALL="bundle exec cap capbash:$MODE TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP"
-cd ./submodules/bootstrap
-$CAP_CALL
+(cd ./submodules/bootstrap && bundle exec cap capbash:$MODE TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)

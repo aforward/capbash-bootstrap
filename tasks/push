@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./submodules/bootstrap/env
 
 if [ -z "$1" ]; then
   echo "USAGE: capbash push <Target IP/host> <user>"
