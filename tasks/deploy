@@ -6,10 +6,6 @@ set -euo pipefail ; IFS=$'\n\t'
 
 TARGET=${1} # the ip of the server
 NODE=${2-helloworld}
-USER=${3-root}
-GROUP=${4-$USER}
-REMOTE_DIR=${REMOTE_DIR-/var/capbash} # where to save on the remote server
-SSH_LOGLEVEL=${SSH_LOGLEVEL-1}
 
 if [[ -z "$2" ]]; then
   if [[ -e ./nodes/default ]]; then
@@ -27,7 +23,12 @@ if [ "$TARGET" == "local" ] || [ "$TARGET" == "local" ]; then
   notify "Deploying $NODE locally ..."
   ./nodes/$NODE
 else
+  USER=${3-root}
+  GROUP=${4-$USER}
+  REMOTE_DIR=${REMOTE_DIR-/var/capbash} # where to save on the remote server
+  SSH_LOGLEVEL=${SSH_LOGLEVEL-1}
   AUTHORIZED_KEYS_FILENAME=./assets/${USER}_authorized_keys
+
   if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
     mkdir -p ./assets
     pubkey_file=$HOME/.ssh/id_dsa.pub
