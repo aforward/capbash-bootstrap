@@ -27,10 +27,10 @@ else
 fi
 
 if [[ "$USER" == root ]]; then
-  debug "  -- Clearing SUDO environment variable. (running as root already)"
+  debug "Clearing SUDO environment variable. (running as root already)"
   export SUDO=""
 else
-  debug "  -- Setting SUDO environment variable. (running as $USER)"
+  debug "Setting SUDO environment variable. (running as $USER)"
   export SUDO=sudo
 fi
 

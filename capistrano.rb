@@ -78,7 +78,11 @@ namespace :capbash do
       set_output Logger::DEBUG
       SSHKit.config.output = SSHKit::Formatter::SimpleText.new($stdout)
 
-      execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} ./nodes/#{ENV['NODE']}"
+      begin
+        execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} ./nodes/#{ENV['NODE']}"
+      rescue Exception => e
+        # eat the exception
+      end
 
       # Now reset the SSH formatter
       SSHKit.config.format = :pretty
