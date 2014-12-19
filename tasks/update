@@ -1,5 +1,5 @@
 #!/bin/bash
-git submodule foreach git pull
+git submodule update
 
 mkdir -p ./nodes
 cp ./submodules/bootstrap/files/helloworld_node ./nodes/helloworld
