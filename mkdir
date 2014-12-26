@@ -9,12 +9,15 @@ while test ${#} -gt 0
 do
   VARIABLE=$1
 
-  if [[ -z "${!VARIABLE:-}" ]]; then
-    error "Unknown variable $VARIABLE, make sure it is export'ed"
-    exit 1
+  if [[ "$VARIABLE" == *"/"* ]]; then
+    DIR=$VARIABLE
+  else
+    if [[ -z "${!VARIABLE:-}" ]]; then
+      error "Unknown variable $VARIABLE, make sure it is export'ed"
+      exit 1
+    fi
+    DIR=${!VARIABLE}
   fi
-
-  DIR=${!VARIABLE}
 
   if [ ! -e $DIR ] ; then
     SCRIPT_OUTPUT=$(mkdir -p ${DIR} > $MKDIR_OUTPUT 2>&1)

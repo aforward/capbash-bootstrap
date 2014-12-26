@@ -1,0 +1,23 @@
+#!/bin/bash
+[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+set -euo pipefail ; IFS=$'\n\t'
+
+SCP_OUTPUT=/tmp/scp_output.log
+PEMCHECK_FILENAME=./assets/ssh/$SERVER.readme
+PEM_FILENAME=./assets/ssh/$SERVER.pem
+
+if [[ -e "$PEM_FILENAME.readme" ]] && [[ ! -e "$PEM_FILENAME.pem" ]]; then
+  error "MISSING $PEM_FILENAME, unable to access $SERVER"
+  exit 1
+fi
+
+notify "  -- Downloading $FILENAME from $DIR/$FILENAME to $TO_DIR/$FILENAME"
+if [[ -e "$PEM_FILENAME" ]]; then
+  debug "  -- Loading private key from ./assets/ssh/$SERVER.pem"
+  SCRIPT_OUTPUT=$(scp -i $PEM_FILENAME $SERVER:$DIR/$FILENAME $TO_DIR > $SCP_OUTPUT 2>&1)
+else
+  debug "  -- Running scp without private pem (if needed, please add it to $PEM_FILENAME)"
+  SCRIPT_OUTPUT=$(scp $SERVER:$DIR/$FILENAME $TO_DIR > $SCP_OUTPUT 2>&1)
+fi
+ERROR="Unable to copy $IMAGE_NAME from $SERVER:$DIR/$FILENAME due to ..." ./submodules/bootstrap/failonerrors $? $LOAD_OUTPUT
+[ $? -ne 0 ] && exit 1

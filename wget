@@ -8,6 +8,13 @@ LOCAL_FILE=$SRC_DIR/$TARGET_NAME
 if [[ ! -e $LOCAL_FILE ]]; then
   notify "  -- Downloading $NAME from $REMOTE_URL/$SRC_NAME to $LOCAL_FILE"
   (cd $SRC_DIR && wget --quiet $WGET_PARAMS -O $TARGET_NAME $REMOTE_URL/$SRC_NAME)
+
+  if [[ ! -e $LOCAL_FILE ]]; then
+    error "Unable to download $REMOTE_URL/$SRC_NAME to $SRC_DIR/$TARGET_NAME"
+    exit 1
+  fi
+
 else
   debug "  -- Already downloaded $NAME to ${LOCAL_FILE}"
 fi
+
