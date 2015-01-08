@@ -25,13 +25,8 @@ do
     [ $? -ne 0 ] && exit 1
     debug "  -- Created $VARIABLE ($DIR)"
 
-    if [[ "$USER" != "$OWNER" ]]; then
-      SCRIPT_OUTPUT=$(chown -R $OWNER $DIR > $MKDIR_OUTPUT 2>&1)
-      ERROR="Unable to chown to $OWNER $DIR due to ..." ./submodules/bootstrap/failonerrors $? $MKDIR_OUTPUT
-      [ $? -ne 0 ] && exit 1
-      debug "  -- Set ownership to $OWNER ($DIR)"
-    fi
-
+    OWNER=$OWNER ./submodules/bootstrap/chownif $DIR
+    [ $? -ne 0 ] && exit 1
   else
     debug "  -- Re-using $VARIABLE ($DIR)"
   fi

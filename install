@@ -7,6 +7,7 @@ set -euo pipefail ; IFS=$'\n\t'
 #-----------
 
 export BIN_DIR=${BIN_DIR-/usr/local/bin}
+OWNER=${OWNER-$USER}
 
 #-----------
 # Install Script
@@ -16,7 +17,7 @@ notify "Install bootstrap..."
 
 BOOTSTRAP_OUTPUT=/tmp/bootstrap.log
 
-./submodules/bootstrap/mkdir BIN_DIR
+OWNER=$OWNER ./submodules/bootstrap/mkdir BIN_DIR
 
 ./submodules/bootstrap/cp ./submodules/bootstrap/files/helloworld $BIN_DIR/helloworld
 debug "  -- Adding $BIN_DIR/helloworld"
