@@ -11,12 +11,17 @@ if [[ -e "$PEM_FILENAME.readme" ]] && [[ ! -e "$PEM_FILENAME.pem" ]]; then
 fi
 
 notify "  -- Downloading $FILENAME from $DIR/$FILENAME to $TO_DIR/$FILENAME"
-if [[ -e "$PEM_FILENAME" ]]; then
-  debug "  -- Loading private key from ./assets/ssh/$SERVER.pem"
-  SCRIPT_OUTPUT=$(scp -i $PEM_FILENAME $SERVER:$DIR/$FILENAME $TO_DIR > $SCP_OUTPUT 2>&1)
+
+if [[ -e "$TO_DIR/$FILENAME" ]]; then
+  debug "  -- Already downloaded $TO_DIR/$FILENAME, delete to force a new download"
 else
-  debug "  -- Running scp without private pem (if needed, please add it to $PEM_FILENAME)"
-  SCRIPT_OUTPUT=$(scp $SERVER:$DIR/$FILENAME $TO_DIR > $SCP_OUTPUT 2>&1)
+  if [[ -e "$PEM_FILENAME" ]]; then
+    debug "  -- Loading private key from ./assets/ssh/$SERVER.pem"
+    SCRIPT_OUTPUT=$(scp -i $PEM_FILENAME $SERVER:$DIR/$FILENAME $TO_DIR > $SCP_OUTPUT 2>&1)
+  else
+    debug "  -- Running scp without private pem (if needed, please add it to $PEM_FILENAME)"
+    SCRIPT_OUTPUT=$(scp $SERVER:$DIR/$FILENAME $TO_DIR > $SCP_OUTPUT 2>&1)
+  fi
+  ERROR="Unable to copy $FILENAME from $SERVER:$DIR/$FILENAME due to ..." ./submodules/bootstrap/failonerrors $? $SCP_OUTPUT
+  [ $? -ne 0 ] && exit 1
 fi
-ERROR="Unable to copy $IMAGE_NAME from $SERVER:$DIR/$FILENAME due to ..." ./submodules/bootstrap/failonerrors $? $LOAD_OUTPUT
-[ $? -ne 0 ] && exit 1
