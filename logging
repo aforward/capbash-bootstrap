@@ -38,10 +38,10 @@ warn() { log $WARNING_LEVEL "  ${LIGHT_RED}WARNING${NC} [${LIGHT_GREEN}$(date +"
 notify() { log $INFO_LEVEL "  ${BLUE}INFO${NC}    [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] $1${NC}"; }
 debug() { log $DEBUG_LEVEL "  ${LIGHT_GREY}DEBUG${NC}   [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] ${LIGHT_GREY}$1${NC}"; }
 
-error_all() { tail -n 100 $1 > $1.last ; while read line; do error "$line" ; done < $1.last ; }
-warn_all() { tail -n 100 $1 > $1.last ; while read line; do warn "$line" ; done < $1.last ; }
-notify_all() { tail -n 100 $1 > $1.last ; while read line; do notify "$line" ; done < $1.last ; }
-debug_all() { tail -n 100 $1 > $1.last ; while read line; do debug "$line" ; done < $1.last ; }
+error_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while read line; do error "$line" ; done < $1.last ;) }
+warn_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while read line; do warn "$line" ; done < $1.last ;) }
+notify_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while read line; do notify "$line" ; done < $1.last ;) }
+debug_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while read line; do debug "$line" ; done < $1.last ;) }
 
 log() {
   LOGLEVEL=${LOGLEVEL-$INFO_LEVEL}
