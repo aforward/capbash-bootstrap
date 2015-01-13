@@ -3,7 +3,6 @@
 set -euo pipefail ; IFS=$'\n\t'
 
 SCP_OUTPUT=/tmp/scp_output.log
-PEMCHECK_FILENAME=./assets/ssh/$SERVER.readme
 PEM_FILENAME=./assets/ssh/$SERVER.pem
 
 if [[ -e "$PEM_FILENAME.readme" ]] && [[ ! -e "$PEM_FILENAME.pem" ]]; then
