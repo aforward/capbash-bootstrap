@@ -1,5 +1,5 @@
 #!/bin/bash
-[[ -e ./submodules/bootstrap/logging ]] && [[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+[[ -e ./bits/bootstrap/logging ]] && [[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
 [[ -z "$INFO_LEVEL" ]] && source logging
 
 if [ $1 -ne 0 ] ; then

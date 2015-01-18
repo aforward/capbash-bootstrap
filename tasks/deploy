@@ -1,6 +1,6 @@
 #!/bin/bash
-[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
-. ./submodules/bootstrap/env
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
+. ./bits/bootstrap/env
 
 set -euo pipefail ; IFS=$'\n\t'
 
@@ -44,7 +44,7 @@ else
   debug "Uploading Authorized Keys ($USER) For Bootstrap..."
   ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
   scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
-  (cd ./submodules/bootstrap && bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)
+  (cd ./bits/bootstrap && bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)
 fi
 
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
 
 WGET_PARAMS=${WGET_PARAMS-""}
 TARGET_NAME=${TARGET_NAME-$SRC_NAME}

@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./submodules/bootstrap/env
+. ./bits/bootstrap/env
 
 if [ -z "$1" ]; then
   echo "USAGE: capbash pull <Target IP/host> <user>"

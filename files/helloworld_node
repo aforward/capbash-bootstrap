@@ -1,2 +1,2 @@
 #!/bin/bash
-./submodules/bootstrap/install
+./bits/bootstrap/install

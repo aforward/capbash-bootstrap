@@ -1,5 +1,5 @@
 #!/bin/bash
-[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
 set -euo pipefail ; IFS=$'\n\t'
 
 if [[ ! -z "$ERRORS" ]]; then

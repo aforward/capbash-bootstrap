@@ -29,4 +29,4 @@ echo "Uploading Authorized Keys For Bootstrap..."
 ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
 scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
-(cd ./submodules/bootstrap && bundle exec cap capbash:$MODE TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)
+(cd ./bits/bootstrap && bundle exec cap capbash:$MODE TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)

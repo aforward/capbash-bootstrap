@@ -19,9 +19,9 @@ if [[ "$SUBMODULE" == "--all" ]]; then
 else
   GIT_URL=https://github.com/aforward/capbash-$SUBMODULE
   echo "Installing $SUBMODULE ($GIT_URL)..."
-  git submodule add --force $GIT_URL ./submodules/$SUBMODULE
+  git submodule add --force $GIT_URL ./bits/$SUBMODULE
 
-  BOOTSTRAP_FILE=./submodules/$SUBMODULE/bootstrap
+  BOOTSTRAP_FILE=./bits/$SUBMODULE/bootstrap
   if [ -f $BOOTSTRAP_FILE ]; then
     echo "  -- bootstrapping module"
     $BOOTSTRAP_FILE

@@ -1,5 +1,5 @@
 #!/bin/bash
-[[ -z "$INFO_LEVEL" ]] && source ./submodules/bootstrap/logging
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
 
 #-----------
 # Configurations
@@ -16,9 +16,9 @@ notify "Install bootstrap..."
 
 BOOTSTRAP_OUTPUT=/tmp/bootstrap.log
 
-OWNER=$OWNER ./submodules/bootstrap/mkdir BIN_DIR
+OWNER=$OWNER ./bits/bootstrap/mkdir BIN_DIR
 
-./submodules/bootstrap/cp ./submodules/bootstrap/files/helloworld $BIN_DIR/helloworld
+./bits/bootstrap/cp ./bits/bootstrap/files/helloworld $BIN_DIR/helloworld
 debug "  -- Adding $BIN_DIR/helloworld"
 chmod 755 $BIN_DIR/helloworld
 debug "  -- Adding $BIN_DIR/helloworld"
@@ -31,13 +31,13 @@ else
 fi
 
 debug "  -- Making logger available on node"
-./submodules/bootstrap/cp ./submodules/bootstrap/logging $BIN_DIR/logging
+./bits/bootstrap/cp ./bits/bootstrap/logging $BIN_DIR/logging
 
 debug "  -- Making capbashenv available on node"
-./submodules/bootstrap/cp ./submodules/bootstrap/env $BIN_DIR/capbashenv
+./bits/bootstrap/cp ./bits/bootstrap/env $BIN_DIR/capbashenv
 
 debug "  -- Making resolvevars available on node"
-./submodules/bootstrap/cp ./submodules/bootstrap/resolvevars $BIN_DIR/resolvevars
+./bits/bootstrap/cp ./bits/bootstrap/resolvevars $BIN_DIR/resolvevars
 
 if [[ "`which wget 2> /dev/null`" == "" ]]; then
   if [[ "$OS" == "ubuntu" ]]; then
@@ -53,7 +53,7 @@ if [[ "`which wget 2> /dev/null`" == "" ]]; then
     else
       notify "  -- Installing wget via brew"
       SCRIPT_OUTPUT=$(brew install -y wget > $BOOTSTRAP_OUTPUT 2>&1)
-      ERROR="Unable to install wget via brew due to ..." ./submodules/bootstrap/failonerrors $? $BOOTSTRAP_OUTPUT
+      ERROR="Unable to install wget via brew due to ..." ./bits/bootstrap/failonerrors $? $BOOTSTRAP_OUTPUT
       [ $? -ne 0 ] && exit 1
       debug $SCRIPT_OUTPUT
     fi
