@@ -1,0 +1,33 @@
+#!/bin/bash
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
+
+BIT=$1
+ARGS=${2-""}
+
+if [[ "$BIT" == "--all" ]]; then
+  # todo, use capbash ls to automate this
+  capbash bitpush apache
+  capbash bitpush cron
+  capbash bitpush deploykeys
+  capbash bitpush docker
+  capbash bitpush drupal
+  capbash bitpush elixir
+  capbash bitpush git
+  capbash bitpush monit
+  capbash bitpush mysql
+  capbash bitpush nginx
+  capbash bitpush phoenix
+  capbash bitpush rails
+  capbash bitpush tarball
+elif [[ ! -e "bits/$BIT" ]]; then
+  debug "Skipping uninstalled project $BIT"
+else
+  GIT_OUTPUT=/tmp/bitpush_${BIT}.log
+  GIT_URL=https://github.com/aforward/capbash-$BIT
+  notify "Pushing subtree $BIT ($GIT_URL)..."
+  debug "  -- git subtree push $ARGS --prefix=bits/$BIT $BIT master"
+  GIT_ERRORS=$(git subtree push $ARGS --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
+  ERROR="Unable to push subtree $BIT to $GIT_URL due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
+  [ $? -ne 0 ] && exit 1
+  debug_all ${GIT_OUTPUT}
+fi

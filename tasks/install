@@ -1,4 +1,6 @@
 #!/bin/bash
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
+
 BIT=$1
 
 if [[ "$BIT" == "--all" ]]; then
@@ -17,15 +19,27 @@ if [[ "$BIT" == "--all" ]]; then
   capbash install rails
   capbash install tarball
 else
+  GIT_OUTPUT=/tmp/install_${BIT}.log
   GIT_URL=https://github.com/aforward/capbash-$BIT
-  echo "Installing $BIT ($GIT_URL)..."
-  git subtree add --prefix=bits/$BIT --squash $GIT_URL master
+  notify "Installing $BIT ($GIT_URL)..."
+  capbash bitremote $BIT
+
+  if [[ -e "./bits/$BIT" ]]; then
+    debug "  -- Subtree bits/$BIT already appears to exist, not adding"
+  else
+    debug "  -- git subtree add --prefix=bits/$BIT --squash $BIT master"
+    GIT_ERRORS=$(git subtree add --prefix=bits--prefix/$BIT --squash $BIT master > ${GIT_OUTPUT} 2>&1)
+    ERROR="Unable to install subtree $BIT from $GIT_URL due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
+    [ $? -ne 0 ] && exit 1
+    debug_all ${GIT_OUTPUT}
+  fi
+
   BOOTSTRAP_FILE=./bits/$BIT/bootstrap
   if [ -f $BOOTSTRAP_FILE ]; then
-    echo "  -- bootstrapping module"
+    debug "  -- bootstrapping module"
     $BOOTSTRAP_FILE
   fi
-  echo "DONE, Installing $BIT ($GIT_URL)."
+  notify "DONE, Installing $BIT ($GIT_URL)."
 fi
 
 
