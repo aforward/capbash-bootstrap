@@ -1,7 +1,7 @@
 #!/bin/bash
-SUBMODULE=$1
+BIT=$1
 
-if [[ "$SUBMODULE" == "--all" ]]; then
+if [[ "$BIT" == "--all" ]]; then
   # todo, use capbash ls to automate this
   capbash install apache
   capbash install cron
@@ -17,16 +17,15 @@ if [[ "$SUBMODULE" == "--all" ]]; then
   capbash install rails
   capbash install tarball
 else
-  GIT_URL=https://github.com/aforward/capbash-$SUBMODULE
-  echo "Installing $SUBMODULE ($GIT_URL)..."
-  git submodule add --force $GIT_URL ./bits/$SUBMODULE
-
-  BOOTSTRAP_FILE=./bits/$SUBMODULE/bootstrap
+  GIT_URL=https://github.com/aforward/capbash-$BIT
+  echo "Installing $BIT ($GIT_URL)..."
+  git subtree add --prefix=bits/$BIT --squash $GIT_URL master
+  BOOTSTRAP_FILE=./bits/$BIT/bootstrap
   if [ -f $BOOTSTRAP_FILE ]; then
     echo "  -- bootstrapping module"
     $BOOTSTRAP_FILE
   fi
-  echo "DONE, Installing $SUBMODULE ($GIT_URL)."
+  echo "DONE, Installing $BIT ($GIT_URL)."
 fi
 
 
