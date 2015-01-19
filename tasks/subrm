@@ -22,7 +22,7 @@ if [[ "$SUBMODULE" == "--all" ]]; then
 elif [[ ! -e "submodules/$SUBMODULE" ]]; then
   debug "Skipping uninstalled project $SUBMODULE"
 else
-  git submodule deinit submodules/$SUBMODULE && \
-  git rm submodules/$SUBMODULE && \
+  git submodule deinit submodules/$SUBMODULE
+  git rm submodules/$SUBMODULE
   rm -rf .git/modules/submodules/$SUBMODULE
 fi
