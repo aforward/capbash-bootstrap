@@ -23,11 +23,10 @@ elif [[ ! -e "bits/$BIT" ]]; then
   debug "Skipping uninstalled project $BIT"
 else
   GIT_OUTPUT=/tmp/bitpush_${BIT}.log
-  GIT_URL=https://github.com/aforward/capbash-$BIT
-  notify "Pushing subtree $BIT ($GIT_URL)..."
-  debug "  -- git subtree push $ARGS --prefix=bits/$BIT $BIT master"
+  notify "Pushing subtree $BIT ..."
+  debug "  -- git subtree push $ARGS --squash  --prefix=bits/$BIT $BIT master"
   GIT_ERRORS=$(git subtree push $ARGS --squash --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
-  ERROR="Unable to push subtree $BIT to $GIT_URL due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
+  ERROR="Unable to push subtree $BIT due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
   [ $? -ne 0 ] && exit 1
   debug_all ${GIT_OUTPUT}
 fi
