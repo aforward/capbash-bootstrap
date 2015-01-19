@@ -26,7 +26,7 @@ else
   GIT_URL=https://github.com/aforward/capbash-$BIT
   notify "Pushing subtree $BIT ($GIT_URL)..."
   debug "  -- git subtree push $ARGS --prefix=bits/$BIT $BIT master"
-  GIT_ERRORS=$(git subtree push $ARGS --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
+  GIT_ERRORS=$(git subtree push $ARGS --squash --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
   ERROR="Unable to push subtree $BIT to $GIT_URL due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
   [ $? -ne 0 ] && exit 1
   debug_all ${GIT_OUTPUT}
