@@ -28,7 +28,7 @@ else
     debug "  -- Subtree bits/$BIT already appears to exist, not adding"
   else
     debug "  -- git subtree add --prefix=bits/$BIT --squash $BIT master"
-    GIT_ERRORS=$(git subtree add --prefix=bits--prefix/$BIT --squash $BIT master > ${GIT_OUTPUT} 2>&1)
+    GIT_ERRORS=$(git subtree add --prefix=bits/$BIT --squash $BIT master > ${GIT_OUTPUT} 2>&1)
     ERROR="Unable to install subtree $BIT from $GIT_URL due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
     [ $? -ne 0 ] && exit 1
     debug_all ${GIT_OUTPUT}
