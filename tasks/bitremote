@@ -22,7 +22,7 @@ else
   GIT_OUTPUT=/tmp/install_${BIT}.log
   GIT_URL=https://github.com/aforward/capbash-$BIT
   debug "Adding $BIT as a remote to $GIT_URL..."
-  GIT_ERRORS=$(git remote add $BIT $GIT_URL > ${GIT_OUTPUT} 2>&1)
+  GIT_ERRORS=$(git remote add -f $BIT $GIT_URL > ${GIT_OUTPUT} 2>&1)
 fi
 
 
