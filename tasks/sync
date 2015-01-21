@@ -1,4 +1,6 @@
 #!/bin/bash
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
+
 MODE=${1}
 TARGET=${2} # the ip of the server
 USER=${3-root}
@@ -13,20 +15,12 @@ if [ -z "$MODE" ] || [ "$MODE" != "push" -a "$MODE" != "pull" ]; then
 fi
 
 AUTHORIZED_KEYS_FILENAME=./assets/${USER}_authorized_keys
-if [ ! -f $AUTHORIZED_KEYS_FILENAME ]; then
-  mkdir -p ./assets
-  pubkey_file=$HOME/.ssh/id_dsa.pub
-  if [ ! -f $pubkey_file ]; then
-    echo "Please put your public key in $AUTHORIZED_KEYS_FILENAME file"
-    exit 0
-  else
-    echo "Copying your public key ($pubkey_file) to $AUTHORIZED_KEYS_FILENAME"
-    cp $pubkey_file $AUTHORIZED_KEYS_FILENAME
-  fi
+if [ -f $AUTHORIZED_KEYS_FILENAME ]; then
+  debug "Uploading Authorized Keys ($USER) For Bootstrap..."
+  ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
+  scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
+else
+  debug "Skipping authorized keys, edit $AUTHORIZED_KEYS_FILENAME if you want to override $TARGET"
 fi
-
-echo "Uploading Authorized Keys For Bootstrap..."
-ssh $USER@$TARGET 'mkdir -p ~/.ssh' > /dev/null
-scp $AUTHORIZED_KEYS_FILENAME $USER@$TARGET:~/.ssh/authorized_keys > /dev/null
 
 (cd ./bits/bootstrap && bundle exec cap capbash:$MODE TARGET=$TARGET NODE=default USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)
