@@ -23,7 +23,7 @@ elif [[ ! -e "bits/$BIT" ]]; then
   debug "Skipping uninstalled project $BIT"
 else
   GIT_OUTPUT=/tmp/bitpush_${BIT}.log
-  notify "Pushing subtree $BIT ..."
+  notify "Pulling subtree $BIT ..."
   debug "  -- git subtree pull $ARGS --prefix=bits/$BIT $BIT master"
   GIT_ERRORS=$(git subtree pull $ARGS --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
   ERROR="Unable to pull subtree $BIT due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
