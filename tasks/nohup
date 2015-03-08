@@ -14,14 +14,14 @@ if [[ -z "$2" ]]; then
 fi
 
 if [ -z "$TARGET" ]; then
-  notify "USAGE: capbash deploy <Target IP/host> <target>"
-  notify "   eg: capbash deploy my-server.localnet helloworld"
+  notify "USAGE: capbash nohup <Target IP/host> <node>"
+  notify "   eg: capbash nohup my-server.localnet helloworld"
   exit 0
 fi
 
 if [ "$TARGET" == "local" ] || [ "$TARGET" == "local" ]; then
   notify "Deploying $NODE locally ..."
-  ./nodes/$NODE
+  nohup ./nodes/$NODE &
 else
   USER=${3-root}
   GROUP=${4-$USER}
@@ -35,5 +35,5 @@ else
   else
     debug "Skipping authorized keys, edit $AUTHORIZED_KEYS_FILENAME if you want to override $TARGET"
   fi
-  (cd ./bits/bootstrap && bundle exec cap capbash:deploy TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)
+  (cd ./bits/bootstrap && bundle exec cap capbash:nohup TARGET=$TARGET NODE=$NODE USER=$USER GROUP=$GROUP REMOTE_DIR=$REMOTE_DIR)
 fi
