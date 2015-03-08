@@ -43,6 +43,13 @@ namespace :capbash do
     invoke 'capbash:install_node'
   end
 
+  desc "Deploy to your server, but using nohup to detach"
+  task :nohup do
+    invoke 'capbash:install_rsync'
+    invoke 'capbash:push'
+    invoke 'capbash:install_nohup_node'
+  end
+
   desc "Install Cookbook Repository from cwd"
   task :install_rsync do
     on roles(:target), in: :sequence, wait: 1 do
@@ -80,6 +87,29 @@ namespace :capbash do
 
       begin
         execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} ./nodes/#{ENV['NODE']}"
+      rescue Exception => e
+        # eat the exception
+      end
+
+      # Now reset the SSH formatter
+      SSHKit.config.format = :pretty
+      set_output old_log_level
+    end
+  end
+
+  # TODO, consolidat install_node and install_nohup_node
+  task :install_nohup_node do
+    on roles(:target), in: :sequence, wait: 1 do
+      old_log_level = fetch(:log_level)
+
+      # Default capbash log level to INFO
+      # But set SSH to debug so that the remote server will be logged locally
+      capbash_log_level = ENV['LOGLEVEL'] || Logger::INFO
+      set_output Logger::DEBUG
+      SSHKit.config.output = SSHKit::Formatter::SimpleText.new($stdout)
+
+      begin
+        execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} nohup ./nodes/#{ENV['NODE']} > nohup.out 2>&1 & sleep 2"
       rescue Exception => e
         # eat the exception
       end
