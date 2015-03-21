@@ -7,6 +7,7 @@ ARGS=${2-""}
 if [[ "$BIT" == "" ]]; then
   notify "Initializing all bits..."
   # todo, use capbash ls to automate this
+  capbash bitinit bootstrap
   capbash bitinit apache
   capbash bitinit cron
   capbash bitinit deploykeys
@@ -23,12 +24,7 @@ if [[ "$BIT" == "" ]]; then
   notify "DONE, Initializing all bits."
 elif [[ ! -e "bits/$BIT" ]]; then
   debug "  -- Skipping uninstalled project $BIT"
-elif [[ `git remote | grep $BIT` == "$BIT" ]]; then
-  debug "  -- Already initialized $BIT"
 else
-  GIT_OUTPUT=/tmp/bitinit_${BIT}.log
-  debug "  -- git remote add $BIT https://github.com/aforward/capbash-$BIT"
-  GIT_ERRORS=$(git remote add $BIT https://github.com/aforward/capbash-$BIT > ${GIT_OUTPUT} 2>&1)
-  ERROR="Unable to init subtree $BIT from $GIT_URL due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
+  capbash bitremote $BIT
   [ $? -ne 0 ] && exit 1
 fi
