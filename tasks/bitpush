@@ -28,5 +28,4 @@ else
   GIT_ERRORS=$(git subtree push $ARGS --squash --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
   ERROR="Unable to push subtree $BIT due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
   [ $? -ne 0 ] && exit 1
-  debug_all ${GIT_OUTPUT}
 fi
