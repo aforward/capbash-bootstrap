@@ -139,7 +139,7 @@ namespace :capbash do
       SSHKit.config.output = SSHKit::Formatter::SimpleText.new($stdout)
 
       begin
-        nnohup_call = "sh -c \"notify 'FIRST deploy...' ; ./nodes/#{ENV['NODE']} ; debug 'DONE, FIRST deploy.' ; notify 'SECOND deploy...' ; ./nodes/#{ENV['NODE']} ; debug 'DONE, second deploy.'\""
+        nnohup_call = "sh -c \"echo 'FIRST deploy...' ; ./nodes/#{ENV['NODE']} ; echo 'DONE, FIRST deploy.' ; echo 'SECOND deploy...' ; ./nodes/#{ENV['NODE']} ; echo 'DONE, second deploy.'\""
         execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} nohup #{nnohup_call} > nohup.out 2>&1 & sleep 2"
       rescue Exception => e
         # eat the exception
