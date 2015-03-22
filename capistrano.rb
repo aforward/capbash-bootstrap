@@ -50,6 +50,13 @@ namespace :capbash do
     invoke 'capbash:install_nohup_node'
   end
 
+  desc "Deploy twice to your server (e.g. setup groups, then do the full deploy), but using nohup to detach"
+  task :nnohup do
+    invoke 'capbash:install_rsync'
+    invoke 'capbash:push'
+    invoke 'capbash:install_nnohup_node'
+  end
+
   desc "Install Cookbook Repository from cwd"
   task :install_rsync do
     on roles(:target), in: :sequence, wait: 1 do
@@ -97,7 +104,7 @@ namespace :capbash do
     end
   end
 
-  # TODO, consolidat install_node and install_nohup_node
+  # TODO, consolidat install_node and install_nohup_node and install_nnohup_node
   task :install_nohup_node do
     on roles(:target), in: :sequence, wait: 1 do
       old_log_level = fetch(:log_level)
@@ -110,6 +117,30 @@ namespace :capbash do
 
       begin
         execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} nohup ./nodes/#{ENV['NODE']} > nohup.out 2>&1 & sleep 2"
+      rescue Exception => e
+        # eat the exception
+      end
+
+      # Now reset the SSH formatter
+      SSHKit.config.format = :pretty
+      set_output old_log_level
+    end
+  end
+
+  # TODO, consolidat install_node and install_nohup_node and install_nnohup_node
+  task :install_nnohup_node do
+    on roles(:target), in: :sequence, wait: 1 do
+      old_log_level = fetch(:log_level)
+
+      # Default capbash log level to INFO
+      # But set SSH to debug so that the remote server will be logged locally
+      capbash_log_level = ENV['LOGLEVEL'] || Logger::INFO
+      set_output Logger::DEBUG
+      SSHKit.config.output = SSHKit::Formatter::SimpleText.new($stdout)
+
+      begin
+        nnohup_call = "sh -c \"notify 'FIRST deploy...' ; ./nodes/#{ENV['NODE']} ; debug 'DONE, FIRST deploy.' ; notify 'SECOND deploy...' ; ./nodes/#{ENV['NODE']} ; debug 'DONE, second deploy.'\""
+        execute "cd #{capbash_dir} && LOGLEVEL=#{capbash_log_level} nohup #{nnohup_call} > nohup.out 2>&1 & sleep 2"
       rescue Exception => e
         # eat the exception
       end
