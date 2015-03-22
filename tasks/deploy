@@ -2,15 +2,18 @@
 [[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
 . ./bits/bootstrap/env
 
-set -euo pipefail ; IFS=$'\n\t'
-
 TARGET=${1} # the ip of the server
-NODE=${2-helloworld}
 
 if [[ -z "$2" ]]; then
   if [[ -e ./nodes/default ]]; then
+    notify "Installing default node."
     NODE=default
+  else
+    error "Please provide a node to deploy, or create a default one (e.g. ./nodes/default)"
+    exit 1
   fi
+else
+  NODE=${2}
 fi
 
 if [ -z "$TARGET" ]; then
