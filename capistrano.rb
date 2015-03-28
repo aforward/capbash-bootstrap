@@ -13,9 +13,9 @@ class CapbashFormatter < SSHKit::Formatter::Abstract
   end
 end
 
-if ENV['TARGET'].nil? || ENV['USER'].nil? || ENV['NODE'].nil? || ENV['GROUP'].nil? || ENV['REMOTE_DIR'].nil?
+if ENV['TARGET'].nil? || ENV['OWNER'].nil? || ENV['NODE'].nil? || ENV['GROUP'].nil? || ENV['REMOTE_DIR'].nil?
   puts "Please specify target 'TARGET=<remote_host>', e.g. 'TARGET=10.0.0.3'\n" if ENV['TARGET'].nil?
-  puts "Please specify user 'USER=<user>', e.g. 'USER=root'\n" if ENV['USER'].nil?
+  puts "Please specify user 'OWNER=<user>', e.g. 'OWNER=root'\n" if ENV['OWNER'].nil?
   puts "Please specify user 'GROUP=<user>', e.g. 'GROUP=www-data'\n" if ENV['GROUP'].nil?
   puts "Please specify node 'NODE=<node>', e.g. 'NODE=default'\n" if ENV['NODE'].nil?
   puts "Please specify remote deploy dir 'REMOTE_DIR=<remote_dir>', e.g. 'REMOTE_DIR=/var/capbash'\n" if ENV['REMOTE_DIR'].nil?
@@ -23,7 +23,7 @@ if ENV['TARGET'].nil? || ENV['USER'].nil? || ENV['NODE'].nil? || ENV['GROUP'].ni
   exit
 end
 
-role :target, "#{ENV['USER']}@#{ENV['TARGET']}"
+role :target, "#{ENV['OWNER']}@#{ENV['TARGET']}"
 set :stage, :production
 set :format, :pretty
 
@@ -68,17 +68,17 @@ namespace :capbash do
   desc "Re-install Cookbook Repository from cwd"
   task :push do
     run_locally do
-      execute "rsync -avz --delete -e \"ssh -p22\" \"#{cwd}/\" \"#{ENV['USER']}@#{ENV["TARGET"]}:#{capbash_dir}\" --exclude \".svn\" --exclude \".git\""
+      execute "rsync -avz --delete -e \"ssh -p22\" \"#{cwd}/\" \"#{ENV['OWNER']}@#{ENV["TARGET"]}:#{capbash_dir}\" --exclude \".svn\" --exclude \".git\""
     end
     on roles(:target) do
-      execute "chown -R #{ENV['USER']}:#{ENV['GROUP']} #{capbash_dir}"
+      execute "chown -R #{ENV['OWNER']}:#{ENV['GROUP']} #{capbash_dir}"
     end
   end
 
   desc "Grab latest Cookbook Repository from remote for cwd"
   task :pull do
     run_locally do
-      execute "rsync -avz --delete -e \"ssh -p22\" \"#{ENV['USER']}@#{ENV["TARGET"]}:#{capbash_dir}/\" \"#{cwd}\" --exclude \".svn\" --exclude \".git\""
+      execute "rsync -avz --delete -e \"ssh -p22\" \"#{ENV['OWNER']}@#{ENV["TARGET"]}:#{capbash_dir}/\" \"#{cwd}\" --exclude \".svn\" --exclude \".git\""
     end
   end
 
