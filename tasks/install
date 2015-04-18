@@ -20,7 +20,7 @@ if [[ "$BIT" == "--all" ]]; then
   capbash install tarball
 else
   GIT_OUTPUT=/tmp/install_${BIT}.log
-  GIT_URL=https://github.com/aforward/capbash-$BIT
+  GIT_URL=https://github.com/capbash/capbash-$BIT
   notify "Installing $BIT ($GIT_URL)..."
   capbash bitremote $BIT
 
