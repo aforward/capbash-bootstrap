@@ -1,6 +1,5 @@
 #!/bin/bash
 [[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
-set -euo pipefail ; IFS=$'\n\t'
 
 MKDIR_OUTPUT=/tmp/mkdir.log
 OWNER=${OWNER-$USER}
@@ -8,7 +7,6 @@ OWNER=${OWNER-$USER}
 while test ${#} -gt 0
 do
   VARIABLE=$1
-
   if [[ "$VARIABLE" == *"/"* ]]; then
     DIR=$VARIABLE
   else
