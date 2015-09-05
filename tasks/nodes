@@ -1,0 +1,9 @@
+#!/bin/bash
+[[ -z "$INFO_LEVEL" ]] && source ./bits/bootstrap/logging
+
+green "Available nodes include:"
+for node in "./nodes"/*
+do
+  NODE_NAME=`echo "$node" | cut -d'/' -f 3`
+  green "  -- $NODE_NAME"
+done

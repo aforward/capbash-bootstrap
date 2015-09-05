@@ -36,7 +36,14 @@ FATAL_LEVEL=4
 error() { log $ERROR_LEVEL "  ${DARK_RED}ERROR${NC}   [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] ${DARK_RED}$1${NC}"; }
 warn() { log $WARNING_LEVEL "  ${LIGHT_RED}WARNING${NC} [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] ${LIGHT_RED}$1${NC}"; }
 notify() { log $INFO_LEVEL "  ${BLUE}INFO${NC}    [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] $1${NC}"; }
+info() { log $INFO_LEVEL "  ${BLUE}INFO${NC}    [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] $1${NC}"; }
 debug() { log $DEBUG_LEVEL "  ${LIGHT_GREY}DEBUG${NC}   [${LIGHT_GREEN}$(date +"%Y-%m-%d %H:%M:%S")${NC}] ${LIGHT_GREY}$1${NC}"; }
+
+blue() { pp "${BLUE}$1${NC}"; }
+grey() { pp "${LIGHT_GREY}$1${NC}"; }
+red() { pp "${DARK_RED}$1${NC}"; }
+green() { pp "${LIGHT_GREEN}$1${NC}"; }
+black() { pp "$1"; }
 
 error_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while read line; do error "$line" ; done < $1.last ;) }
 warn_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while read line; do warn "$line" ; done < $1.last ;) }
@@ -46,12 +53,16 @@ debug_all() { [[ "$1" != "/dev/null" ]] && (tail -n 100 $1 > $1.last ; while rea
 log() {
   LOGLEVEL=${LOGLEVEL-$INFO_LEVEL}
   if [ "$LOGLEVEL" -le "$1" ] && [ ! -z "$2" ]; then
-    if [[ `uname` == "Darwin" ]]; then
-      echo -e "$2" >&3
-    else
-      # Expand escaped characters, wrap at 70 chars, indent wrapped lines
-      echo -e "$2" | sed '2~1s/^/  /' >&3
-    fi
+    pp "$2"
+  fi
+}
+
+pp() {
+  if [[ `uname` == "Darwin" ]]; then
+    echo -e "$1" >&3
+  else
+    # Expand escaped characters, wrap at 70 chars, indent wrapped lines
+    echo -e "$1" | sed '2~1s/^/  /' >&3
   fi
 }
 
@@ -64,3 +75,9 @@ export -f error_all
 export -f warn_all
 export -f notify_all
 export -f debug_all
+
+export -f blue
+export -f grey
+export -f red
+export -f green
+
