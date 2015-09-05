@@ -20,11 +20,11 @@ if [[ "$BIT" == "--all" ]]; then
   capbash bitpull rails
   capbash bitpull tarball
 elif [[ ! -e "bits/$BIT" ]]; then
-  debug "Skipping uninstalled project $BIT"
+  grey "Skipping uninstalled project $BIT"
 else
   GIT_OUTPUT=/tmp/bitpull_${BIT}.log
-  notify "Pulling subtree $BIT ..."
-  debug "  -- git subtree pull $ARGS --squash --prefix=bits/$BIT $BIT master"
+  green "Pulling subtree $BIT ..."
+  grey "  (git subtree pull $ARGS --squash --prefix=bits/$BIT $BIT master)"
   GIT_ERRORS=$(git subtree pull $ARGS --squash --prefix=bits/$BIT $BIT master > ${GIT_OUTPUT} 2>&1)
   ERROR="Unable to pull subtree $BIT due to ..." ./bits/bootstrap/failonerrors $? $GIT_OUTPUT
   [ $? -ne 0 ] && exit 1
